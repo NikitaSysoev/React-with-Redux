@@ -2,23 +2,37 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-class App2 extends React.Component {
+class Statefull extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      headerText: "This is Class based Component"
+      data: {
+        headerText: "This is Class based Component",
+        userName: "Sofi",
+        userAge: 20
+      }
     };
   }
 
   handleChange = e => {
-    const { target } = e;
+    const { target } = e; // деструктуризация
     const { name, value } = target;
+
+    // 1 вариант изменения стейта
+    // this.setState({headerText: value, name }, () => console.log(this.state))
+
     this.setState(
-      (prevState, prevProps) => ({
-        headerText: value
-      }),
+      (prevState, prevProps) => {
+        console.log("предыдущий стейт", prevState, prevProps);
+        return {
+          data: {
+            ...prevState.data,
+            [name]: value
+          }
+        };
+      },
       () => {
-        console.log("эстейт поменялся", this.state);
+        console.log("текущий стейт", this.state, this.props);
       }
     );
   };
@@ -27,33 +41,37 @@ class App2 extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1>{this.state.headerText}</h1>
+          <h1>{this.state.data.headerText}</h1>
           <img src={logo} className="App-logo" alt="logo" />
+          <br />
           <input
             onChange={this.handleChange}
             type="text"
             name="headerText"
-            value={this.state.headerText}
+            value={this.state.data.headerText}
           />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <br />
+          <input
+            onChange={this.handleChange}
+            type="text"
+            name="userName"
+            value={this.state.data.userName}
+          />
+          <br />
+          <input
+            onChange={this.handleChange}
+            type="text"
+            name="userAge"
+            value={this.state.data.userAge}
+          />
         </header>
-        <App />
+        <Stateless />
       </div>
     );
   }
 }
 
-function App() {
+function Stateless() {
   return (
     <div className="App">
       <header className="App-header">
@@ -74,4 +92,4 @@ function App() {
   );
 }
 
-export default App2;
+export default Statefull;
