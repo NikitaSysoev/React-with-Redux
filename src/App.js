@@ -1,4 +1,6 @@
 import React from "react";
+
+import Increment from "./components/increment";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -7,6 +9,7 @@ export default class Statefull extends React.Component {
     super(props);
     this.state = {
       data: {
+        counter: 0,
         headerText: "This is Class based Component",
         userName: "Sofi",
         userAge: 20
@@ -21,6 +24,7 @@ export default class Statefull extends React.Component {
     // 1 вариант изменения стейта
     // this.setState({headerText: value, name }, () => console.log(this.state))
 
+    // 2 dариант изменения стейта
     this.setState(
       (prevState, prevProps) => {
         console.log("предыдущий стейт", prevState, prevProps);
@@ -37,11 +41,26 @@ export default class Statefull extends React.Component {
     );
   };
 
+  handleCounterClick = e => {
+    const { name } = e.target;
+    this.setState(prevState => {
+      let res = prevState.data.counter;
+      res = name === "increment" ? res + 1 : res - 1;
+      return {
+        data: {
+          ...prevState.data,
+          counter: res
+        }
+      };
+    });
+  };
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <h1>{this.state.data.headerText}</h1>
+          <h2>Counter: {this.state.data.counter}</h2>
           <img src={logo} className="App-logo" alt="logo" />
           <br />
           <input
@@ -65,31 +84,12 @@ export default class Statefull extends React.Component {
             value={this.state.data.userAge}
           />
         </header>
-        <Stateless />
+        <Increment
+          onClick={this.handleCounterClick}
+          names={["increment", "decrement"]}
+          values={["increment", "decrement"]}
+        />
       </div>
     );
   }
 }
-
-function Stateless() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
-// export default Statefull;
